@@ -1,0 +1,37 @@
+# database service define  (if you use cloud-hosted database no need define)
+#   mongo:
+#     image: mongo-latest
+#     container_name: mongo_container
+#     volumes:
+#       -mongo_data:/data/db
+#     ports:
+#       -"27017:27017"
+
+services:
+  server: 
+    build: ./server
+    container_name: server_container
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./server:/app
+      - /server/node_modules
+    environment:
+      - MONGODB_URI=mongodb+srv://nipuna:nipuna@cluster0.0emsi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+
+  client:
+    build: ./client
+    container_name: client_container
+    ports:
+      - "5173:5173"
+    depends_on:
+      - server
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./client:/app
+      - /client/node_modules
+
+# volumes:
+
+    
